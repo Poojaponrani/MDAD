@@ -1,14 +1,68 @@
-import React, { useState } from 'react';
-import { MDADProvider } from '@/context/MDADContext';
+import React, { useState, useEffect } from 'react';
+import { MDADProvider, useMDAD } from '@/context/MDADContext';
 import { Header } from '@/components/Header';
-import { ThreatMap } from '@/components/ThreatMap';
-import { ThreatPanel } from '@/components/ThreatPanel';
 import { CommandDashboard } from '@/components/CommandDashboard';
 import { SignalHistory } from '@/components/SignalHistory';
 import { AlertFeed } from '@/components/AlertFeed';
 import { SettingsPanel } from '@/components/SettingsPanel';
+import { ThreatPanelSimple } from '@/components/ThreatPanelSimple';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Map, LayoutDashboard, Radio, Bell } from 'lucide-react';
+import { Map, LayoutDashboard, Radio, Bell, AlertTriangle } from 'lucide-react';
+
+function MapPlaceholder() {
+  const { signals, threats } = useMDAD();
+  
+  return (
+    <div className="h-full flex items-center justify-center bg-card">
+      <div className="text-center p-8">
+        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+          <Map className="w-12 h-12 text-primary" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Geospatial View</h2>
+        <p className="text-muted-foreground mb-6 max-w-md">
+          Monitoring {signals.length} signals across {threats.length} threat clusters
+        </p>
+        <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+          <div className="tactical-panel p-4">
+            <p className="text-2xl font-mono font-bold text-domain-physical">{signals.filter(s => s.domain === 'physical').length}</p>
+            <p className="text-xs text-muted-foreground">Physical</p>
+          </div>
+          <div className="tactical-panel p-4">
+            <p className="text-2xl font-mono font-bold text-domain-cyber">{signals.filter(s => s.domain === 'cyber').length}</p>
+            <p className="text-xs text-muted-foreground">Cyber</p>
+          </div>
+          <div className="tactical-panel p-4">
+            <p className="text-2xl font-mono font-bold text-domain-humint">{signals.filter(s => s.domain === 'humint').length}</p>
+            <p className="text-xs text-muted-foreground">HUMINT</p>
+          </div>
+        </div>
+        
+        <div className="mt-6 space-y-2">
+          {threats.slice(0, 3).map(threat => (
+            <div key={threat.id} className="tactical-panel p-3 text-left flex items-center gap-3">
+              <AlertTriangle className={`w-5 h-5 ${
+                threat.confidenceScore > 70 ? 'text-threat-critical' : 
+                threat.confidenceScore > 40 ? 'text-threat-medium' : 'text-threat-low'
+              }`} />
+              <div className="flex-1">
+                <p className="text-sm font-mono">{threat.id}</p>
+                <p className="text-xs text-muted-foreground">
+                  {threat.signalCount} signals • {threat.radiusKm.toFixed(0)}km radius
+                </p>
+              </div>
+              <span className={`px-2 py-1 text-xs font-bold rounded ${
+                threat.confidenceScore > 70 ? 'bg-threat-critical/20 text-threat-critical' : 
+                threat.confidenceScore > 40 ? 'bg-threat-medium/20 text-threat-medium' : 'bg-threat-low/20 text-threat-low'
+              }`}>
+                {threat.confidenceScore}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function MDADPlatform() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -58,10 +112,10 @@ function MDADPlatform() {
             <TabsContent value="map" className="flex-1 m-0 overflow-hidden">
               <div className="h-full flex">
                 <div className="flex-1">
-                  <ThreatMap />
+                  <MapPlaceholder />
                 </div>
                 <div className="hidden lg:block w-[360px]">
-                  <ThreatPanel />
+                  <ThreatPanelSimple />
                 </div>
               </div>
             </TabsContent>
