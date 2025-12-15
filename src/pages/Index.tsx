@@ -69,13 +69,13 @@ function MDADPlatform() {
   const [activeTab, setActiveTab] = useState('map');
   
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden">
+    <div className="h-screen flex flex-col bg-background">
       <Header onOpenSettings={() => setSettingsOpen(true)} />
       
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex min-h-0">
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
             <div className="border-b border-border bg-card/50 px-4">
               <TabsList className="h-12 bg-transparent gap-1">
                 <TabsTrigger 
@@ -109,9 +109,9 @@ function MDADPlatform() {
               </TabsList>
             </div>
             
-            <TabsContent value="map" className="flex-1 m-0 overflow-auto">
-              <div className="min-h-full flex">
-                <div className="flex-1 min-h-[600px]">
+            <TabsContent value="map" className="flex-1 m-0 min-h-0 overflow-auto">
+              <div className="h-full flex">
+                <div className="flex-1 overflow-auto">
                   <MapPlaceholder />
                 </div>
                 <div className="hidden lg:block w-[360px] overflow-auto">
@@ -120,15 +120,15 @@ function MDADPlatform() {
               </div>
             </TabsContent>
             
-            <TabsContent value="dashboard" className="flex-1 m-0 overflow-auto">
+            <TabsContent value="dashboard" className="flex-1 m-0 min-h-0 overflow-auto">
               <CommandDashboard />
             </TabsContent>
             
-            <TabsContent value="signals" className="flex-1 m-0 overflow-auto">
+            <TabsContent value="signals" className="flex-1 m-0 min-h-0 overflow-auto">
               <SignalHistory />
             </TabsContent>
             
-            <TabsContent value="alerts" className="flex-1 m-0 overflow-auto md:hidden">
+            <TabsContent value="alerts" className="flex-1 m-0 min-h-0 overflow-auto md:hidden">
               <AlertFeed />
             </TabsContent>
           </Tabs>
