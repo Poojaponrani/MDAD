@@ -109,26 +109,26 @@ function MDADPlatform() {
               </TabsList>
             </div>
             
-            <TabsContent value="map" className="flex-1 m-0 overflow-hidden">
-              <div className="h-full flex">
-                <div className="flex-1">
+            <TabsContent value="map" className="flex-1 m-0 overflow-auto">
+              <div className="min-h-full flex">
+                <div className="flex-1 min-h-[600px]">
                   <MapPlaceholder />
                 </div>
-                <div className="hidden lg:block w-[360px]">
+                <div className="hidden lg:block w-[360px] overflow-auto">
                   <ThreatPanelSimple />
                 </div>
               </div>
             </TabsContent>
             
-            <TabsContent value="dashboard" className="flex-1 m-0 overflow-hidden">
+            <TabsContent value="dashboard" className="flex-1 m-0 overflow-auto">
               <CommandDashboard />
             </TabsContent>
             
-            <TabsContent value="signals" className="flex-1 m-0 overflow-hidden">
+            <TabsContent value="signals" className="flex-1 m-0 overflow-auto">
               <SignalHistory />
             </TabsContent>
             
-            <TabsContent value="alerts" className="flex-1 m-0 overflow-hidden md:hidden">
+            <TabsContent value="alerts" className="flex-1 m-0 overflow-auto md:hidden">
               <AlertFeed />
             </TabsContent>
           </Tabs>
